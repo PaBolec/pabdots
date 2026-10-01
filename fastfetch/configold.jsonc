@@ -1,0 +1,53 @@
+{
+  "logo": {
+    "type": "file",
+    "source": "/home/paul/.config/fastfetch/Shin",
+    "color": {
+      "1": "38;2;159;131;131"
+    }
+  },
+  "display": {
+    "separator": " >> ",
+    "constants": [
+      "─────────────────"
+    ],
+    "key": {
+      "type": "icon",
+      "paddingLeft": 2
+    },
+    "color": {
+      "keys": "38;2;159;131;131",
+      "output": "38;2;159;131;131",
+      "title": "38;2;159;131;131",
+      "separator": "38;2;255;255;255"
+    }
+  },
+  "modules": [
+    "cpu",
+    "gpu",
+    "disk",
+    "memory",
+    "swap",
+    "display",
+    "bluetooth",
+    "sound",
+    "os",
+    "kernel",
+    "separator",
+    "lm",
+    "de",
+    "shell",
+    "terminal",
+    "theme",
+    "icons",
+    "separator",
+    "uptime",
+    "media",
+
+    {
+      "type": "colors",
+      "paddingLeft": 2,
+      "symbol": "circle"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "$schema": "https://raw.githubusercontent.com/fastfetch-cli/fastfetch/2.66.0/doc/json_schema.json",
+  "logo": {
+    "type": "builtin",
+    "source": "Arch2",
+    "color": {
+      "1": "38;2;255;255;255",
+      "2": "38;2;255;255;255",
+    }
+  },
+  "display": {
+    "separator": " >> ",
+    "constants": [
+      "─────────────────"
+    ],
+    "key": {
+      "type": "icon",
+      "paddingLeft": 2
+    },
+    "color": {
+      "keys": "38;2;255;255;255",
+      "output": "38;2;255;255;255",
+      "title": "38;2;255;255;255",
+      "separator": "38;2;255;255;255"
+    }
+  },
+  "modules": [
+    "cpu",
+    "gpu",
+    "disk",
+    "memory",
+    "swap",
+    "display",
+    "bluetooth",
+    "sound",
+    "os",
+    "kernel",
+    "separator",
+    "lm",
+    "de",
+    "shell",
+    "terminal",
+    "theme",
+    "icons",
+    "separator",
+    "uptime",
+    "media",
+    {
+      "type": "colors",
+      "paddingLeft": 2,
+      "symbol": "circle"
+    }
+  ]
+}
