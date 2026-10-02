@@ -15,14 +15,33 @@ waybar/style.css       - waybar styling (slate/Nord palette)
 ## Install
 
 ```bash
-sudo pacman -S hyprland kitty waybar ranger fuzzel dunst swaybg
+git clone https://github.com/PaBolec/pabdots.git
+cd pabdots
+./install.sh
+```
 
-mkdir -p ~/.config/hypr ~/.config/kitty ~/.config/waybar
+Installs the needed packages, backs up any existing configs to
+`~/.config-backup-<date>`, then symlinks everything from this repo
+into place. Symlinked, not copied — so editing a file in
+`~/.config/...` edits the file in this repo directly, meaning you can
+`git add`/`commit`/`push` changes any time. Safe to re-run — it skips
+anything already correctly linked instead of re-backing it up.
 
-cp hypr/hyprland.conf ~/.config/hypr/hyprland.conf
-cp kitty/kitty.conf ~/.config/kitty/kitty.conf
-cp waybar/config ~/.config/waybar/config
-cp waybar/style.css ~/.config/waybar/style.css
+## Update
+
+```bash
+./update.sh
+```
+
+`git pull` + re-run `install.sh`. For testing changes in a VM: push
+from your main machine, then `./update.sh` in the VM to pull and
+re-apply.
+
+## Uninstall
+
+```bash
+./uninstall.sh            # just removes the symlinks
+./uninstall.sh --restore  # also restores the most recent pre-install backup
 ```
 
 Edit the `swaybg` line in `hyprland.conf` to point at your own wallpaper.

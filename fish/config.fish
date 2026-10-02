@@ -7,7 +7,8 @@ if status is-interactive
     set -g fish_greeting
     fastfetch
 end
-    # Start KVM services when needed
+
+# Start KVM services when needed
 function vm-start
     sudo systemctl start libvirtd.service libvirtd.socket virtlogd.service
     echo "KVM Services Started!"
