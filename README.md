@@ -18,7 +18,8 @@ waybar/style.css       - waybar styling (slate/Nord palette)
 git clone https://github.com/PaBolec/pabdots.git
 cd pabdots
 ./install.sh
-required packqages: hyprland kitty waybar ranger fuzzel dunst swaybg fastfetch fish
+
+required packages: hyprland kitty waybar ranger fuzzel dunst swaybg fastfetch fish
 ``` 
 
 Installs the needed packages, backs up any existing configs to
