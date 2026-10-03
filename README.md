@@ -56,7 +56,9 @@ layouts, `Super+1-9` tags, `Super+B` bluetuith (TUI bluetooth manager).
 git clone https://github.com/PaBolec/pabdots.git
 cd pabdots
 ./install.sh
-```
+
+required packages: hyprland kitty waybar ranger fuzzel dunst swaybg fastfetch fish
+``` 
 
 Installs the needed packages (including bluez/blueman for Bluetooth —
 the service gets enabled automatically), backs up any existing configs
