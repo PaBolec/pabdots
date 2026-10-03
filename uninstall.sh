@@ -6,12 +6,13 @@
 set -e
 
 TARGETS=(
-    "$HOME/.config/hypr/hyprland.conf"
+    "$HOME/.config/hypr/hyprland.lua"
     "$HOME/.config/kitty/kitty.conf"
     "$HOME/.config/waybar/config"
     "$HOME/.config/waybar/style.css"
     "$HOME/.config/fastfetch/config.jsonc"
     "$HOME/.config/fish/config.fish"
+    "$HOME/.local/bin/start-dwl.sh"
 )
 
 echo "==> Removing symlinks created by install.sh"
