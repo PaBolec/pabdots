@@ -1,46 +1,49 @@
 #!/usr/bin/env bash
-# paul's dotfiles uninstaller
-# removes the symlinks install.sh created, leaves anything else alone.
-# run from inside the cloned repo: ./uninstall.sh [--restore]
+# usage: ./uninstall.sh [--restore] [--purge]
+#   --restore  put back the most recent ~/.config-backup-* after unlinking
+#   --purge    also remove the dwl package and the session entry
+set -euo pipefail
 
-set -e
-
-TARGETS=(
-    "$HOME/.config/hypr/hyprland.lua"
-    "$HOME/.config/kitty/kitty.conf"
-    "$HOME/.config/waybar/config"
-    "$HOME/.config/waybar/style.css"
-    "$HOME/.config/fastfetch/config.jsonc"
-    "$HOME/.config/fish/config.fish"
-    "$HOME/.local/bin/start-dwl.sh"
-)
-
-echo "==> Removing symlinks created by install.sh"
-
-for dest in "${TARGETS[@]}"; do
-    if [ -L "$dest" ]; then
-        rm "$dest"
-        echo "  removed $dest"
-    elif [ -e "$dest" ]; then
-        echo "  skipping $dest (exists but isn't a symlink, leaving it alone)"
-    else
-        echo "  skipping $dest (doesn't exist)"
-    fi
+DOTS="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+RESTORE=0; PURGE=0
+for arg in "$@"; do
+    case "$arg" in
+        --restore) RESTORE=1 ;;
+        --purge) PURGE=1 ;;
+        *) echo "unknown option: $arg"; exit 1 ;;
+    esac
 done
 
-echo
-if [ "$1" = "--restore" ]; then
-    LATEST=$(ls -dt "$HOME"/.config-backup-* 2>/dev/null | head -n1)
-    if [ -z "$LATEST" ]; then
-        echo "No backup folder found, nothing to restore."
-        exit 0
+unlink_config() {
+    local dest="$1"
+    if [ -L "$dest" ] && [[ "$(readlink -f "$dest")" == "$DOTS"/* ]]; then
+        rm "$dest"; echo "    unlinked $dest"
     fi
-    echo "==> Restoring from $LATEST"
-    cp -r "$LATEST"/. "$HOME/.config/"
-    echo "    Restored."
-else
-    echo "==> Symlinks removed."
-    echo "    Pre-dotfiles configs (if any existed) are backed up under:"
-    ls -d "$HOME"/.config-backup-* 2>/dev/null || echo "    (no backup folders found)"
-    echo "    Run './uninstall.sh --restore' to auto-restore the most recent one."
+}
+
+echo "==> removing symlinks"
+for d in kitty fish fastfetch dwl; do
+    [ -d "$HOME/.config/$d" ] || continue
+    while IFS= read -r -d '' link; do
+        unlink_config "$link"
+    done < <(find "$HOME/.config/$d" -maxdepth 1 -type l -print0)
+done
+unlink_config "$HOME/.local/bin/start-dwl.sh"
+
+if [ "$RESTORE" -eq 1 ]; then
+    latest=$(ls -dt "$HOME"/.config-backup-* 2>/dev/null | head -n 1 || true)
+    if [ -n "$latest" ]; then
+        echo "==> restoring $latest"
+        cp -a "$latest"/. "$HOME"/
+    else
+        echo "==> no backup found"
+    fi
 fi
+
+if [ "$PURGE" -eq 1 ]; then
+    echo "==> removing dwl package and session entry"
+    sudo pacman -Rns dwl-pab || true
+    sudo rm -f /usr/share/wayland-sessions/dwl-session.desktop
+    echo "    dwlb was installed to /usr/local, remove with: sudo make -C ~/.local/src/dwlb uninstall"
+fi
+echo "==> done"

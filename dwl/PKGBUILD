@@ -1,0 +1,51 @@
+# dwl built with paul's config.h, tracked by pacman so removal is clean
+# build: cd dwl && makepkg -fsi
+#
+# pkgver must be a dwl tag that builds against the wlroots below.
+# check the release page / README of dwl for the matching wlroots version
+# and bump both together (also WLROOTS_PKG in install.sh).
+# XWAYLAND=1 (default) builds xwayland support, needed for steam/proton.
+# it is NOT an x11 session. set XWAYLAND=0 to build pure wayland.
+
+pkgname=dwl-pab
+pkgver=0.8
+pkgrel=1
+pkgdesc="dwl compositor built with a custom config.h"
+arch=(x86_64)
+url="https://codeberg.org/dwl/dwl"
+license=(GPL-3.0-or-later)
+depends=(wlroots0.19 libinput libxkbcommon wayland)
+makedepends=(git wayland-protocols pkgconf libxcb xcb-util-wm)
+optdepends=('xorg-xwayland: run x11 apps (steam, proton games)')
+provides=(dwl)
+conflicts=(dwl)
+source=("git+${url}.git#tag=v${pkgver}"
+        "config.h")
+sha256sums=('SKIP' 'SKIP')
+
+prepare() {
+    cd dwl
+    cp "$srcdir/config.h" config.h
+
+    # optional patches: drop *.patch files in dwl/patches/ and they get applied in order
+    shopt -s nullglob
+    for p in "$startdir"/patches/*.patch; do
+        echo "applying $(basename "$p")"
+        patch -Np1 -i "$p"
+    done
+
+    if [ "${XWAYLAND:-1}" = 1 ]; then
+        sed -i -e 's/^#XWAYLAND =.*/XWAYLAND = -DXWAYLAND/' \
+               -e 's/^#XLIBS =.*/XLIBS = xcb xcb-icccm/' config.mk
+    fi
+}
+
+build() {
+    cd dwl
+    make
+}
+
+package() {
+    cd dwl
+    make PREFIX=/usr DESTDIR="$pkgdir" install
+}
