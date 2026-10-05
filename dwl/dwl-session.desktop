@@ -1,6 +1,0 @@
-[Desktop Entry]
-Name=dwl
-Comment=dwm for wayland, paul's build
-Exec=@HOME@/.local/bin/start-dwl.sh
-Type=Application
-DesktopNames=dwl
